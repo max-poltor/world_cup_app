@@ -28,17 +28,19 @@ elif st.session_state.step == 2:
 
     with st.form('score_log'):
 
-        col1, col2 = st.columns([0.5, 0.5])
+        col1, col2 = st.columns(2)
 
         with col1:
-
+            
+            st.image("https://flagcdn.com/mx.svg", width=50)
             team1_score = st.number_input('Input the score for the team1',
                                           min_value=0,
                                           step=1
                                         )
         
         with col2:
-
+            
+            st.image("https://flagcdn.com/za.svg", width=50)
             team2_score = st.number_input('Input the score for the team2',
                                           min_value=0,
                                           step=1
