@@ -1,3 +1,5 @@
+USERS = ['Deborah', 'Bhavna', 'Max']
+
 TEAMS = ['France', 'Spain', 'Argentina', 'England', 'Portugal', 'Brazil',
        'Netherlands', 'Morocco', 'Belgium', 'Germany', 'Croatia',
        'Colombia', 'Senegal', 'Mexico', 'United States', 'Uruguay',
