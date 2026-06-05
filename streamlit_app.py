@@ -1,6 +1,5 @@
 import streamlit as st
-import pandas as pd
-from lists import *
+from lists import TEAMS as TEAMS
 
 st.title("This app is for logging the guesses of fifa world cup 2026 matches outcome")
 st.write(
