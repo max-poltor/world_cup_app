@@ -1,5 +1,4 @@
 import streamlit as st
-<<<<<<< HEAD
 from lists import TEAMS as TEAMS
 
 st.title("This app is for logging the guesses of fifa world cup 2026 matches outcome")
@@ -38,10 +37,3 @@ with col2:
                                     step=1
                                     )
 
-=======
-
-st.title("🎈 My new app")
-st.write(
-    "Let's start building! For help and inspiration, head over to [docs.streamlit.io](https://docs.streamlit.io/)."
-)
->>>>>>> 28c9ea698bf00683fe78c40f65e0cb704de6a530
