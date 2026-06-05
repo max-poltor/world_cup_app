@@ -1,0 +1,10 @@
+TEAMS = ['France', 'Spain', 'Argentina', 'England', 'Portugal', 'Brazil',
+       'Netherlands', 'Morocco', 'Belgium', 'Germany', 'Croatia',
+       'Colombia', 'Senegal', 'Mexico', 'United States', 'Uruguay',
+       'Japan', 'Switzerland', 'IR Iran', 'Austria', 'Ecuador',
+       'South Korea', 'Australia', 'Egypt', 'Canada', 'Ivory Coast',
+       'Qatar', 'Algeria', 'Sweden', 'Tunisia', 'Czechia', 'Türkiye',
+       'Norway', 'Scotland', 'DR Congo', 'Bosnia & Herz.', 'Panama',
+       'Saudi Arabia', 'South Africa', 'Iraq', 'Uzbekistan', 'Paraguay',
+       'Ghana', 'Jordan', 'Cape Verde', 'Curaçao', 'Haiti',
+       'New Zealand']
