@@ -1,3 +1,4 @@
 streamlit
 mysqlclient==2.2.8
-sqlalchemy
+SQLAlchemy==1.4.27
+sqlalchemy==1.4.27
