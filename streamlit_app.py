@@ -1,68 +1,99 @@
 import streamlit as st
-from lists import TEAMS as TEAMS, USERS as USERS
+import pandas as pd
+from sqlalchemy import text
 
-st.write("This app is for logging the guesses of fifa world cup 2026 matches outcome")
+matches = pd.read_csv('data/world_cup_matches.csv') # table with match details and official scores
 
-# 1. Initialize the session state to track the current step
-if 'step' not in st.session_state:
-    st.session_state.step = 1
+st.set_page_config(page_title='FIFA World Cup Score Logger App', page_icon=':soccer:', layout='wide')
 
-if st.session_state.step == 1:
+# Initialize connection.
+conn = st.connection('mysql', type='sql')
+predictions = conn.query('SELECT * from user_predictions;', ttl=0) # table with user predictions
 
-    with st.form('user_form'):
+with st.sidebar:
+    user_name = st.selectbox(
+        'Choose your name',
+        options=['Deborah', 'Bhavna', 'Max'],
+        index=None
+    )
 
-        user_name = st.selectbox(
-            'Select your name',
-            options=USERS,
-            index=None
-        )
+if not user_name:
+    st.warning('Please select your name from the sidebar to submit your score predictions.')
+    st.stop()
 
-        submit_1 = st.form_submit_button('Next')
-        
-        if submit_1:
-            st.session_state.user_name = user_name  # Save data
-            st.session_state.step = 2     # Advance to next step
-            st.rerun() 
+main_col1, main_col2 = st.columns([0.6, 0.4])
 
-elif st.session_state.step == 2:
-
-    with st.form('score_log'):
-
-        col1, col2 = st.columns(2)
-
-        with col1:
+with main_col1:
+    with st.container(height=1500, border=False):
+        for match in matches.itertuples():
             
-            st.image("https://flagcdn.com/mx.svg", width=50)
-            team1_score = st.number_input('Input the score for the team1',
-                                          min_value=0,
-                                          step=1
-                                        )
-        
-        with col2:
-            
-            st.image("https://flagcdn.com/za.svg", width=50)
-            team2_score = st.number_input('Input the score for the team2',
-                                          min_value=0,
-                                          step=1
-                                        )
+            # Render only those forms that are for upcoming matches within a week from today.
+            if pd.to_datetime(match.date, dayfirst=True) < pd.to_datetime('today') + pd.to_timedelta(7, unit='d'):
 
-        submit_2 = st.form_submit_button('Submit')
+                key = f'submitted_{match.match_id}_{user_name}'
 
-        if submit_2:
-            st.session_state.team1_score = team1_score  # Save data
-            st.session_state.team2_score = team2_score  # Save data
-            st.session_state.step = 3     # Advance to next step
-            st.rerun()
+                in_db = user_name in predictions[predictions['match_id'] == match.match_id]['user_name'].values
+                in_session = st.session_state.get(key, False)
+                check = in_db or in_session
 
-elif st.session_state.step == 3:
+                with st.form(key=f'form_container_{match.match_id}_{user_name}', border=True):
 
-    with st.form('results_display'):
+                    st.write('Enter your score predictions for the match between **{}** and **{}** and press submit button'.format(match.team1, match.team2))
 
-        st.write(f'{st.session_state.user_name} chosen team1_name playing against team2_name\
-                with the score {st.session_state.team1_score}:{st.session_state.team2_score}!')
+                    st.subheader('Match Details')
 
-        submit_3 = st.form_submit_button('Restart')
+                    col1, col2, col3 = st.columns([0.3, 0.4, 0.3])
+                    with col1:
+                        st.image(f'https://flagcdn.com/{match.team1_code}.svg', width=50)
+                        st.image(f'https://flagcdn.com/{match.team2_code}.svg', width=50)
+                    with col2:
+                        st.write(f'**{match.team1}**')
+                        st.write(f'**{match.team2}**')
+                    with col3:
+                        st.text_input(key=f'{match.match_id}_team1_score', label='', label_visibility='collapsed', disabled=check)
+                        st.text_input(key=f'{match.match_id}_team2_score', label='', label_visibility='collapsed', disabled=check)
 
-        if submit_3:
-            st.session_state.step = 1     # Reset to first step
-            st.rerun()
+                    st.write(f'**Date:** {match.date}')
+                    
+                    submitted = st.form_submit_button(
+                        'Submit',
+                        disabled=check,
+                        type='primary'
+                    )
+                    
+                    if submitted:
+
+                        st.session_state[key] = True
+                        
+                        # Create a dictionary of the new data row to be added to the predictions DataFrame
+                        new_row = {
+                            'match_id': match.match_id,
+                            'user_name': user_name,
+                            'team1_score': st.session_state[f'{match.match_id}_team1_score'],
+                            'team2_score': st.session_state[f'{match.match_id}_team2_score']
+                        }
+                        
+                        # Convert the dictionary to a DataFrame
+                        new_df = pd.DataFrame([new_row])
+
+                        # Append the new DataFrame to the existing predictions DataFrame
+                        predictions = pd.concat([predictions, new_df], ignore_index=True)
+
+                        # update the database with the new predictions DataFrame
+                        with conn.session as session:
+                            session.execute(
+                                text(
+                                    "INSERT INTO user_predictions (match_id, user_name, team1_score, team2_score) "
+                                    "VALUES (:match_id, :user_name, :team1_score, :team2_score)"
+                                ),
+                                params=new_row
+                            )
+                            session.commit()
+                        
+                        st.rerun()
+
+                    else:
+                        pass
+
+with main_col2:
+    st.table(predictions)
