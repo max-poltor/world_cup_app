@@ -8,7 +8,7 @@ st.set_page_config(page_title='FIFA World Cup Score Logger App', page_icon=':soc
 
 # Initialize connection.
 conn = st.connection('fifa_2026_user_predictions', type='sql')
-predictions = conn.query('SELECT * from user_predictions;', ttl=0) # table with user predictions
+predictions = conn.query('SELECT * from user_predictions', ttl=0) # table with user predictions
 
 with st.sidebar:
     user_name = st.selectbox(
@@ -50,8 +50,21 @@ with main_col1:
                         st.write(f'**{match.team1}**')
                         st.write(f'**{match.team2}**')
                     with col3:
-                        st.text_input(key=f'{match.match_id}_team1_score', label='', label_visibility='collapsed', disabled=check)
-                        st.text_input(key=f'{match.match_id}_team2_score', label='', label_visibility='collapsed', disabled=check)
+                        st.number_input(key=f'{match.match_id}_team1_score', 
+                                        label='', 
+                                        label_visibility='collapsed', 
+                                        disabled=check,
+                                        value=None,
+                                        min_value=0,
+                                        step=1)
+                        
+                        st.number_input(key=f'{match.match_id}_team2_score', 
+                                        label='', 
+                                        label_visibility='collapsed', 
+                                        disabled=check,
+                                        value=None,
+                                        min_value=0,
+                                        step=1)
 
                     st.write(f'**Date:** {match.date}')
                     
@@ -62,6 +75,10 @@ with main_col1:
                     )
                     
                     if submitted:
+                        
+                        if st.session_state[f'{match.match_id}_team1_score'] is None or st.session_state[f'{match.match_id}_team2_score'] is None:
+                            st.warning('Please enter valid scores for both teams before submitting your prediction.')
+                            st.stop()
 
                         st.session_state[key] = True
                         
