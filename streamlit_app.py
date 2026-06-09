@@ -7,7 +7,7 @@ matches = pd.read_csv('data/world_cup_matches.csv') # table with match details a
 st.set_page_config(page_title='FIFA World Cup Score Logger App', page_icon=':soccer:', layout='wide')
 
 # Initialize connection.
-conn = st.connection('mysql', type='sql')
+conn = st.connection('fifa_2026_user_predictions', type='sql')
 predictions = conn.query('SELECT * from user_predictions;', ttl=0) # table with user predictions
 
 with st.sidebar:
