@@ -113,4 +113,36 @@ with main_col1:
                         pass
 
 with main_col2:
-    st.table(predictions)
+
+    tab1, tab2 = st.tabs(['Group results', 'Leader board'])
+    
+    with tab1:
+        st.subheader('Group results')
+        st.write('This section shows the group guess of the matches outcome.')
+
+        # Calculate medium score predictions for each team in each match
+        medium_predictions = predictions.groupby('match_id').agg({
+            'team1_score': 'median',
+            'team2_score': 'median'
+        }).reset_index()
+
+        # Generate matches subset based on logged scores
+        matches_subset = matches[matches.match_id.isin(predictions.match_id.unique())]
+
+        # Merge matches_subset with medium predictions by match_id
+        matches_subset = matches_subset.merge(medium_predictions, on='match_id')
+
+        for match in matches_subset.itertuples():
+
+            # Render only those forms that are for upcoming matches within a week from today.
+            if pd.to_datetime(match.date, dayfirst=True) < pd.to_datetime('today') + pd.to_timedelta(7, unit='d'):
+
+                with st.container(border=True):
+
+                    st.write('Our score prediction for the match between **{}** and **{}** ' \
+                    'taking place on {} is **{}**:**{}**'.format(match.team1, match.team2, match.date, round(match.team1_score_y), round(match.team2_score_y)))
+
+
+    with tab2:
+        st.subheader('Leader board')
+        st.write('This section will show the leader board based on the user predictions and official scores once the matches are played.')
