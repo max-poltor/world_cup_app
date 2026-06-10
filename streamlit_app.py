@@ -14,7 +14,7 @@ predictions = conn.query('SELECT * from user_predictions', ttl=0) # table with u
 with st.sidebar:
     user_name = st.selectbox(
         'Choose your name',
-        options=['Deborah', 'Bhavna', 'Max'],
+        options=['Deborah', 'Bhavna', 'Max', 'Dmitry', 'Michael', 'Andrey', 'Viewer'],
         index=None
     )
 
