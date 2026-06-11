@@ -89,15 +89,16 @@ with tab1:
                         'match_id': match.match_id,
                         'user_name': user_name,
                         'team1_score': st.session_state[f'{match.match_id}_team1_score'],
-                        'team2_score': st.session_state[f'{match.match_id}_team2_score']
+                        'team2_score': st.session_state[f'{match.match_id}_team2_score'],
+                        'time_logged': pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')
                     }
                     
                     # update the database with the new predictions DataFrame
                     with conn.session as session:
                         session.execute(
                             text(
-                                "INSERT INTO user_predictions (match_id, user_name, team1_score, team2_score) "
-                                "VALUES (:match_id, :user_name, :team1_score, :team2_score)"
+                                "INSERT INTO user_predictions (match_id, user_name, team1_score, team2_score, time_logged) "
+                                "VALUES (:match_id, :user_name, :team1_score, :team2_score, :time_logged)"
                             ),
                             params=new_row
                         )
