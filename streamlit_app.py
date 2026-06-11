@@ -196,7 +196,9 @@ with tab4:
         column_config={
             'time_logged': st.column_config.DateColumn(
                 format='DD/MM/YYYY HH:mm'
-            )
+            ),
+            'match_id': None,
+            'key': None,
         },
         hide_index=True
     )
