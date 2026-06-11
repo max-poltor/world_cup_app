@@ -192,7 +192,7 @@ with tab3:
 with tab4:
     st.subheader('All entries')
     st.dataframe(
-        predictions,
+        pd.merge(matches[['match_id', 'team1', 'team2']], predictions, on='match_id', how='right'),
         column_config={
             'time_logged': st.column_config.DateColumn(
                 format='DD/MM/YYYY HH:mm'
