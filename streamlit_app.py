@@ -1,15 +1,19 @@
 import streamlit as st
 import pandas as pd
-from sqlalchemy import text
+from st_supabase_connection import SupabaseConnection, execute_query
 
 matches = pd.read_csv('data/world_cup_matches.csv') # table with match details and official scores
 
 st.set_page_config(page_title='FIFA World Cup Score Logger App', page_icon=':soccer:', layout='centered')
 st.html('assets/style.css')
 
-# Initialize connection.
-conn = st.connection('fifa_2026_user_predictions', type='sql')
-predictions = conn.query('SELECT * from user_predictions', ttl=0) # table with user predictions
+# Initialize supabase connection
+conn = st.connection(name='supabase', type=SupabaseConnection, ttl=0)
+query = conn.table('user_predictions').select('*')
+response = execute_query(query, ttl=0)
+
+predictions = pd.DataFrame(pd.json_normalize(response.data))
+predictions['time_logged'] = pd.to_datetime(predictions['time_logged'], dayfirst=True)
 
 with st.sidebar:
     user_name = st.selectbox(
@@ -26,9 +30,10 @@ if not user_name:
 cutoff = pd.to_datetime('today') + pd.Timedelta(7, unit='d')
 upcoming_matches = matches[pd.to_datetime(matches['date'], dayfirst=True) < cutoff]
 
-tab1, tab2, tab3, tab4 = st.tabs(['Log scores', 'Group results', 'Leader board', 'All entries'])
+tab1, tab2, tab3, tab4 = st.tabs(['Log scores', 'Group results', 'Leader board', 'All logs'])
 
 with tab1: 
+
     with st.container(height=1500, border=False):
         for match in upcoming_matches.itertuples():
             
@@ -90,19 +95,12 @@ with tab1:
                         'user_name': user_name,
                         'team1_score': st.session_state[f'{match.match_id}_team1_score'],
                         'team2_score': st.session_state[f'{match.match_id}_team2_score'],
-                        'time_logged': pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')
+                        'time_logged': pd.Timestamp.now().strftime('%d/%m/%Y %H:%M:%S')
                     }
                     
                     # update the database with the new predictions DataFrame
-                    with conn.session as session:
-                        session.execute(
-                            text(
-                                "INSERT INTO user_predictions (match_id, user_name, team1_score, team2_score, time_logged) "
-                                "VALUES (:match_id, :user_name, :team1_score, :team2_score, :time_logged)"
-                            ),
-                            params=new_row
-                        )
-                        session.commit()
+                    insert_query = conn.table('user_predictions').insert(new_row)
+                    execute_query(insert_query)
                     
                     st.rerun()
 
@@ -195,5 +193,10 @@ with tab4:
     st.subheader('All entries')
     st.dataframe(
         predictions,
+        column_config={
+            'time_logged': st.column_config.DateColumn(
+                format='DD/MM/YYYY HH:mm'
+            )
+        },
         hide_index=True
     )

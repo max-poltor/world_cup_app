@@ -1,3 +1,2 @@
 streamlit
-mysqlclient
-sqlalchemy
+st-supabase-connection
