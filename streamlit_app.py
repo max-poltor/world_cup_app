@@ -171,23 +171,41 @@ with tab3:
                 return 3  # exact scoreline
  
             # Compare outcomes: +1 / 0 / -1
-            pred_outcome = (row['team1_score'] > row['team2_score']) - (row['team1_score'] < row['team2_score'])
-            real_outcome = (o['team1_score'] > o['team2_score']) - (o['team1_score'] < o['team2_score'])
+            pred_outcome = [row['team1_score'] > row['team2_score'], row['team1_score'] < row['team2_score']]
+            real_outcome = [o['team1_score'] > o['team2_score'], o['team1_score'] < o['team2_score']]
             return 1 if pred_outcome == real_outcome else 0
  
         scored = predictions[predictions['match_id'].isin(played_matches['match_id'])].copy()
         scored['points'] = scored.apply(score_prediction, axis=1)
- 
+
+        # Calculate the precision of predictions by user
+        precision = []
+
+        for user in scored.user_name.unique():
+            y_true = played_matches[['team1_score', 'team2_score']].values.flatten()
+            y_pred = scored[scored.user_name == user][['team1_score', 'team2_score']].values.flatten()
+            corr_df = pd.DataFrame({'y_true': y_true, 'y_pred': y_pred})
+
+            precision.append([user, corr_df.y_true.corr(corr_df.y_pred)*100])
+        
         leaderboard = (
             scored.groupby('user_name')['points']
             .sum()
             .reset_index()
             .rename(columns={'points': 'total_points'})
-            .sort_values('total_points', ascending=False)
             .reset_index(drop=True)
         )
+
+        leaderboard = pd.merge(leaderboard, pd.DataFrame(precision, columns=['user_name', 'precision']), how='left').sort_values('precision', ascending=False)
+
         leaderboard.index += 1  # rank starts at 1
-        st.dataframe(leaderboard, use_container_width=True)
+        st.dataframe(leaderboard, 
+                     column_config={
+                         'precision': st.column_config.NumberColumn(
+                            format='%.0f %%',
+                         )
+                     },
+                     use_container_width=True)
 
 with tab4:
     st.subheader('All entries')
