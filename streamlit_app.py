@@ -96,7 +96,7 @@ with tab1:
                         'user_name': user_name,
                         'team1_score': st.session_state[f'{match.match_id}_team1_score'],
                         'team2_score': st.session_state[f'{match.match_id}_team2_score'],
-                        'time_logged': pd.Timestamp.now().strftime('%d/%m/%Y %H:%M:%S')
+                        'time_logged': pd.Timestamp.now()
                     }
                     
                     # update the database with the new predictions DataFrame
