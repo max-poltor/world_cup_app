@@ -110,14 +110,54 @@ with tab2:
     st.subheader('Group results')
     st.write('This section shows the group guess of the matches outcome.')
 
-    # Calculate medium score predictions for each team in each match
-    median_predictions = predictions.groupby('match_id').agg(
-        team1_score_predicted=('team1_score', 'median'),
-        team2_score_predicted=('team2_score', 'median')
-    ).reset_index()
+    # Calculate weights for user predictions based on prediction precision statistics
+    played_matches = matches.dropna(subset=['team1_score', 'team2_score'])
+ 
+    if played_matches.empty:
+        
+        # Calculate medium score predictions for each team in each match
+        weighted_predictions = predictions.groupby('match_id').agg(
+            team1_score_predicted=('team1_score', 'median'),
+            team2_score_predicted=('team2_score', 'median')
+        ).reset_index()
 
+    else:
+        
+        scored = predictions[predictions['match_id'].isin(played_matches['match_id'])].copy()
+
+        # Calculate the precision of predictions by user
+        precision = []
+        y_true = played_matches[['team1_score', 'team2_score']].values.flatten()
+
+        for user in scored.user_name.unique():
+            y_pred = []
+            
+            for match in played_matches.match_id.values:
+                row = scored[(scored.match_id == match) & (scored.user_name == user)]
+                if row.empty:
+                    y_pred.extend([np.nan, np.nan])
+                else: 
+                    y_pred.extend(row.iloc[0][['team1_score', 'team2_score']].to_list())
+            
+            corr_df = pd.DataFrame({'y_true': y_true, 'y_pred': y_pred})
+
+            precision.append([user, max(corr_df.y_true.corr(corr_df.y_pred)*100, 0)])
+        
+        precision_df = pd.DataFrame(precision, columns=['user_name', 'precision'])
+
+        weights_df = precision_df.copy()
+        weights_df['weights'] = weights_df.precision.apply(lambda x: x/weights_df.precision.sum())
+
+        weighted_predictions = pd.merge(predictions, weights_df, how='left').groupby('match_id').apply(
+                lambda x: np.average(x['team1_score'], weights=x['weights'])
+            ).to_frame('team1_score_predicted').reset_index()
+        
+        weighted_predictions['team2_score_predicted'] = pd.merge(predictions, weights_df, how='left').groupby('match_id').apply(
+                lambda x: np.average(x['team2_score'], weights=x['weights'])
+            ).values 
+    
     # Filter to matches that have at least one prediction, then merge
-    matches_with_predictions = upcoming_matches[upcoming_matches['match_id'].isin(predictions['match_id'].unique())].merge(median_predictions, on='match_id')
+    matches_with_predictions = upcoming_matches[upcoming_matches['match_id'].isin(predictions['match_id'].unique())].merge(weighted_predictions, on='match_id')
 
     for match in matches_with_predictions.itertuples():
 
@@ -152,7 +192,6 @@ with tab2:
 with tab3:
     st.subheader('Leader board')
     # Only score predictions for matches that have official results
-    played_matches = matches.dropna(subset=['team1_score', 'team2_score'])
  
     if played_matches.empty:
         st.info('The leaderboard will appear here once matches have been played.')
@@ -177,27 +216,8 @@ with tab3:
             real_outcome = [o['team1_score'] > o['team2_score'], o['team1_score'] < o['team2_score']]
             return 1 if pred_outcome == real_outcome else 0
  
-        scored = predictions[predictions['match_id'].isin(played_matches['match_id'])].copy()
         scored['points'] = scored.apply(score_prediction, axis=1)
 
-        # Calculate the precision of predictions by user
-        precision = []
-        y_true = played_matches[['team1_score', 'team2_score']].values.flatten()
-
-        for user in scored.user_name.unique():
-            y_pred = []
-            
-            for match in played_matches.match_id.values:
-                row = scored[(scored.match_id == match) & (scored.user_name == user)]
-                if row.empty:
-                    y_pred.extend([np.nan, np.nan])
-                else: 
-                    y_pred.extend(row.iloc[0][['team1_score', 'team2_score']].to_list())
-            
-            corr_df = pd.DataFrame({'y_true': y_true, 'y_pred': y_pred})
-
-            precision.append([user, corr_df.y_true.corr(corr_df.y_pred)*100])
-        
         leaderboard = (
             scored.groupby('user_name')['points']
             .sum()
@@ -206,7 +226,7 @@ with tab3:
             .reset_index(drop=True)
         )
 
-        leaderboard = pd.merge(leaderboard, pd.DataFrame(precision, columns=['user_name', 'precision']), how='left').sort_values('total_points', ascending=False)
+        leaderboard = pd.merge(leaderboard, precision_df, how='left').sort_values('total_points', ascending=False)
 
         leaderboard.index += 1  # rank starts at 1
         st.dataframe(leaderboard, 
