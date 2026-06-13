@@ -14,7 +14,7 @@ query = conn.table('user_predictions').select('*')
 response = execute_query(query, ttl=0)
 
 predictions = pd.DataFrame(pd.json_normalize(response.data))
-predictions['time_logged'] = pd.to_datetime(predictions['time_logged'], dayfirst=True)
+predictions['time_logged'] = pd.to_datetime(predictions['time_logged'], format='ISO8601')
 
 with st.sidebar:
     user_name = st.selectbox(
