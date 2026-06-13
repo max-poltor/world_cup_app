@@ -221,7 +221,7 @@ with tab4:
     st.dataframe(
         pd.merge(matches[['match_id', 'team1', 'team2']], predictions, on='match_id', how='right'),
         column_config={
-            'time_logged': st.column_config.DateColumn(
+            'time_logged': st.column_config.DatetimeColumn(
                 format='DD/MM/YYYY HH:mm'
             ),
             'match_id': None,
