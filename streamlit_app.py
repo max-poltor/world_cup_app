@@ -14,7 +14,7 @@ query = conn.table('user_predictions').select('*')
 response = execute_query(query, ttl=0)
 
 predictions = pd.DataFrame(pd.json_normalize(response.data))
-predictions['time_logged'] = pd.to_datetime(predictions['time_logged'])
+predictions['time_logged'] = pd.to_datetime(predictions['time_logged'], format='ISO8601', utc=True)
 predictions['time_logged'] = predictions['time_logged'].dt.tz_convert('Indian/Mauritius')
 
 with st.sidebar:
