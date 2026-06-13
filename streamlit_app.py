@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 from st_supabase_connection import SupabaseConnection, execute_query
 
 matches = pd.read_csv('data/world_cup_matches.csv') # table with match details and official scores
@@ -180,10 +181,18 @@ with tab3:
 
         # Calculate the precision of predictions by user
         precision = []
+        y_true = played_matches[['team1_score', 'team2_score']].values.flatten()
 
         for user in scored.user_name.unique():
-            y_true = played_matches[['team1_score', 'team2_score']].values.flatten()
-            y_pred = scored[scored.user_name == user][['team1_score', 'team2_score']].values.flatten()
+            y_pred = []
+            
+            for match in played_matches.match_id.values:
+                row = scored[(scored.match_id == match) & (scored.user_name == user)]
+                if row.empty:
+                    y_pred.extend([np.nan, np.nan])
+                else: 
+                    y_pred.extend(row.iloc[0][['team1_score', 'team2_score']].to_list())
+            
             corr_df = pd.DataFrame({'y_true': y_true, 'y_pred': y_pred})
 
             precision.append([user, corr_df.y_true.corr(corr_df.y_pred)*100])
@@ -196,7 +205,7 @@ with tab3:
             .reset_index(drop=True)
         )
 
-        leaderboard = pd.merge(leaderboard, pd.DataFrame(precision, columns=['user_name', 'precision']), how='left').sort_values('precision', ascending=False)
+        leaderboard = pd.merge(leaderboard, pd.DataFrame(precision, columns=['user_name', 'precision']), how='left').sort_values('total_points', ascending=False)
 
         leaderboard.index += 1  # rank starts at 1
         st.dataframe(leaderboard, 
