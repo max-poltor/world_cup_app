@@ -4,6 +4,7 @@ import numpy as np
 from st_supabase_connection import SupabaseConnection, execute_query
 
 matches = pd.read_csv('data/world_cup_matches.csv') # table with match details and official scores
+matches['date'] = pd.to_datetime(matches['date'], dayfirst=True)
 
 st.set_page_config(page_title='FIFA World Cup Score Logger App', page_icon=':soccer:', layout='centered')
 st.html('assets/style.css')
@@ -29,8 +30,11 @@ if not user_name:
     st.stop()
 
 # --- Pre-filter matches ---
-cutoff = pd.to_datetime('today') + pd.Timedelta(7, unit='d')
-upcoming_matches = matches[pd.to_datetime(matches['date'], dayfirst=True) < cutoff]
+start_date = pd.to_datetime('today').normalize()
+end_date = start_date + pd.Timedelta(7, unit='d')
+mask = (matches['date'] >= start_date) & (matches['date'] <= end_date)
+
+upcoming_matches = matches.loc[mask]
 
 tab1, tab2, tab3, tab4 = st.tabs(['Log scores', 'Group results', 'Leader board', 'All logs'])
 
@@ -145,15 +149,12 @@ with tab2:
         
         precision_df = pd.DataFrame(precision, columns=['user_name', 'precision'])
 
-        weights_df = precision_df.copy()
-        weights_df['weights'] = weights_df.precision.apply(lambda x: x/weights_df.precision.sum())
-
-        weighted_predictions = pd.merge(predictions, weights_df, how='left').groupby('match_id').apply(
-                lambda x: np.average(x['team1_score'], weights=x['weights'])
+        weighted_predictions = pd.merge(predictions, precision_df, how='left').groupby('match_id').apply(
+                lambda x: np.average(x['team1_score'], weights=x['precision'])
             ).to_frame('team1_score_predicted').reset_index()
         
-        weighted_predictions['team2_score_predicted'] = pd.merge(predictions, weights_df, how='left').groupby('match_id').apply(
-                lambda x: np.average(x['team2_score'], weights=x['weights'])
+        weighted_predictions['team2_score_predicted'] = pd.merge(predictions, precision_df, how='left').groupby('match_id').apply(
+                lambda x: np.average(x['team2_score'], weights=x['precision'])
             ).values 
     
     # Filter to matches that have at least one prediction, then merge
@@ -226,7 +227,7 @@ with tab3:
             .reset_index(drop=True)
         )
 
-        leaderboard = pd.merge(leaderboard, precision_df, how='left').sort_values('total_points', ascending=False)
+        leaderboard = pd.merge(leaderboard, precision_df, how='left').sort_values(['total_points', 'precision'], ascending=False)
 
         leaderboard.index += 1  # rank starts at 1
         st.dataframe(leaderboard, 
