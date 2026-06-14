@@ -79,7 +79,7 @@ with tab1:
                                     min_value=0,
                                     step=1)
 
-                st.write(f'**Date:** {match.date}')
+                st.write(f'**Date:** {match.date:%d/%m/%Y}')
                 
                 submitted = st.form_submit_button(
                     'Submit',
@@ -145,6 +145,7 @@ with tab2:
             
             corr_df = pd.DataFrame({'y_true': y_true, 'y_pred': y_pred})
 
+            # set up lower limit of precision greater than zero to avoid division by zero when further estimating weighted average
             precision.append([user, max(corr_df.y_true.corr(corr_df.y_pred)*100, 0.01)])
         
         precision_df = pd.DataFrame(precision, columns=['user_name', 'precision'])
@@ -187,7 +188,7 @@ with tab2:
                 st.write(f'**{round(match.team1_score_predicted)}**')
                 st.write(f'**{round(match.team2_score_predicted)}**')
 
-            st.write(f'**Date:** {match.date}')
+            st.write(f'**Date:** {match.date:%d/%m/%Y}')
 
 
 with tab3:
