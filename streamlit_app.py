@@ -237,7 +237,7 @@ with tab3:
                             format='%.0f %%',
                          )
                      },
-                     use_container_width=True)
+                     width='stretch')
 
 with tab4:
     st.subheader('All entries')
