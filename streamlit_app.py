@@ -145,7 +145,7 @@ with tab2:
             
             corr_df = pd.DataFrame({'y_true': y_true, 'y_pred': y_pred})
 
-            precision.append([user, max(corr_df.y_true.corr(corr_df.y_pred)*100, 0)])
+            precision.append([user, max(corr_df.y_true.corr(corr_df.y_pred)*100, 0.01)])
         
         precision_df = pd.DataFrame(precision, columns=['user_name', 'precision'])
 
