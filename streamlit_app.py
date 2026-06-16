@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from utils.helpers import get_upcoming_matches, calculate_precision, pd_weighted_median, score_prediction
 from st_supabase_connection import SupabaseConnection, execute_query
 
 matches = pd.read_csv('data/world_cup_matches.csv') # table with match details and official scores
@@ -30,11 +31,7 @@ if not user_name:
     st.stop()
 
 # --- Pre-filter matches ---
-start_date = pd.to_datetime('today').normalize()
-end_date = start_date + pd.Timedelta(7, unit='d')
-mask = (matches['date'] >= start_date) & (matches['date'] <= end_date)
-
-upcoming_matches = matches.loc[mask]
+upcoming_matches = get_upcoming_matches(matches)
 
 tab1, tab2, tab3, tab4 = st.tabs(['Log scores', 'Group results', 'Leader board', 'All logs'])
 
@@ -130,32 +127,15 @@ with tab2:
         scored = predictions[predictions['match_id'].isin(played_matches['match_id'])].copy()
 
         # Calculate the precision of predictions by user
-        precision = []
-        y_true = played_matches[['team1_score', 'team2_score']].values.flatten()
+        precision_df = calculate_precision(scored, played_matches)
+        merged_df = pd.merge(predictions, precision_df, how='left')
 
-        for user in scored.user_name.unique():
-            y_pred = []
-            
-            for match in played_matches.match_id.values:
-                row = scored[(scored.match_id == match) & (scored.user_name == user)]
-                if row.empty:
-                    y_pred.extend([np.nan, np.nan])
-                else: 
-                    y_pred.extend(row.iloc[0][['team1_score', 'team2_score']].to_list())
-            
-            corr_df = pd.DataFrame({'y_true': y_true, 'y_pred': y_pred})
-
-            # set up lower limit of precision greater than zero to avoid division by zero when further estimating weighted average
-            precision.append([user, max(corr_df.y_true.corr(corr_df.y_pred)*100, 0.01)])
-        
-        precision_df = pd.DataFrame(precision, columns=['user_name', 'precision'])
-
-        weighted_predictions = pd.merge(predictions, precision_df, how='left').groupby('match_id').apply(
-                lambda x: np.average(x['team1_score'], weights=x['precision'])
+        weighted_predictions = merged_df.groupby('match_id').apply(
+                lambda x: pd_weighted_median(x, 'team1_score', 'precision')
             ).to_frame('team1_score_predicted').reset_index()
-        
-        weighted_predictions['team2_score_predicted'] = pd.merge(predictions, precision_df, how='left').groupby('match_id').apply(
-                lambda x: np.average(x['team2_score'], weights=x['precision'])
+
+        weighted_predictions['team2_score_predicted'] = merged_df.groupby('match_id').apply(
+                lambda x: pd_weighted_median(x, 'team2_score', 'precision')
             ).values 
     
     # Filter to matches that have at least one prediction, then merge
@@ -198,27 +178,7 @@ with tab3:
     if played_matches.empty:
         st.info('The leaderboard will appear here once matches have been played.')
     else:
-        def score_prediction(row):
-            """
-            Award points per prediction row:
-              3 pts — exact scoreline
-              1 pt  — correct outcome (win/draw/loss) but wrong score
-              0 pts — wrong outcome
-            """
-            official = played_matches[played_matches['match_id'] == row['match_id']]
-            if official.empty:
-                return 0
- 
-            o = official.iloc[0]
-            if row['team1_score'] == o['team1_score'] and row['team2_score'] == o['team2_score']:
-                return 3  # exact scoreline
- 
-            # Compare outcomes: +1 / 0 / -1
-            pred_outcome = [row['team1_score'] > row['team2_score'], row['team1_score'] < row['team2_score']]
-            real_outcome = [o['team1_score'] > o['team2_score'], o['team1_score'] < o['team2_score']]
-            return 1 if pred_outcome == real_outcome else 0
- 
-        scored['points'] = scored.apply(score_prediction, axis=1)
+        scored['points'] = scored.apply(lambda x: score_prediction(x, played_matches), axis=1)
 
         leaderboard = (
             scored.groupby('user_name')['points']
