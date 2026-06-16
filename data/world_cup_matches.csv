@@ -11,10 +11,10 @@ match_id,date,team1,team2,team1_code,team2_code,team1_score,team2_score
 10,15/06/2026,Netherlands,Japan,nl,jp,2,2
 11,15/06/2026,Ivory Coast,Ecuador,ci,ec,1,0
 12,15/06/2026,Sweden,Tunisia,se,tn,5,1
-13,15/06/2026,Spain,Cape Verde,es,cv,,
-14,15/06/2026,Belgium,Egypt,be,eg,,
-15,16/06/2026,Saudi Arabia,Uruguay,sa,uy,,
-16,16/06/2026,Iran,New Zealand,ir,nz,,
+13,15/06/2026,Spain,Cape Verde,es,cv,0,0
+14,15/06/2026,Belgium,Egypt,be,eg,1,1
+15,16/06/2026,Saudi Arabia,Uruguay,sa,uy,1,1
+16,16/06/2026,Iran,New Zealand,ir,nz,2,2
 17,16/06/2026,France,Senegal,fr,sn,,
 18,17/06/2026,Iraq,Norway,iq,no,,
 19,17/06/2026,Argentina,Algeria,ar,dz,,
