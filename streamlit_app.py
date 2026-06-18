@@ -185,10 +185,9 @@ with tab3:
             .sum()
             .reset_index()
             .rename(columns={'points': 'total_points'})
-            .reset_index(drop=True)
         )
 
-        leaderboard = pd.merge(leaderboard, precision_df, how='left').sort_values(['total_points', 'precision'], ascending=False)
+        leaderboard = pd.merge(leaderboard, precision_df, how='left').sort_values(['total_points', 'precision'], ascending=False).reset_index(drop=True)
 
         leaderboard.index += 1  # rank starts at 1
         st.dataframe(leaderboard, 
