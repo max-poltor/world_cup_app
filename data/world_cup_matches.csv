@@ -1,73 +1,73 @@
-match_id,date,team1,team2,team1_code,team2_code,team1_score,team2_score,team1_predicted_score,team2_predicted_score,score,score_cum
-1,11/06/2026,Mexico,South Africa,mx,za,2,0,2,1,1,1
-2,12/06/2026,South Korea,Czechia,kr,cz,2,1,1,2,0,1
-3,12/06/2026,Canada,Bosnia-Herzegovina,ca,ba,1,1,2,1,0,1
-4,13/06/2026,United States,Paraguay,us,py,4,1,2,1,1,2
-5,13/06/2026,Qatar,Switzerland,qa,ch,1,1,0,1,0,2
-6,14/06/2026,Brazil,Morocco,br,ma,1,1,3,1,0,2
-7,14/06/2026,Haiti,Scotland,ht,gb,0,1,1,3,1,3
-8,14/06/2026,Australia,Turkey,au,tr,2,0,1,2,0,3
-9,14/06/2026,Germany,Curacao,de,cw,7,1,4,0,1,4
-10,15/06/2026,Netherlands,Japan,nl,jp,2,2,2,1,0,4
-11,15/06/2026,Ivory Coast,Ecuador,ci,ec,1,0,2,2,0,4
-12,15/06/2026,Sweden,Tunisia,se,tn,5,1,3,2,1,5
-13,15/06/2026,Spain,Cape Verde,es,cv,0,0,3,0,0,5
-14,15/06/2026,Belgium,Egypt,be,eg,1,1,2,1,0,5
-15,16/06/2026,Saudi Arabia,Uruguay,sa,uy,1,1,1,3,0,5
-16,16/06/2026,Iran,New Zealand,ir,nz,2,2,1,2,0,5
-17,16/06/2026,France,Senegal,fr,sn,3,1,2,1,1,6
-18,17/06/2026,Iraq,Norway,iq,no,1,4,0,3,1,7
-19,17/06/2026,Argentina,Algeria,ar,dz,3,0,3,1,1,8
-20,17/06/2026,Austria,Jordan,at,jo,3,1,2,1,1,9
-21,17/06/2026,Portugal,DR Congo,pt,cd,1,1,3,1,0,9
-22,18/06/2026,England,Croatia,gb,hr,4,2,2,1,1,10
-23,18/06/2026,Ghana,Panama,gh,pa,1,0,2,1,1,11
-24,18/06/2026,Uzbekistan,Colombia,uz,co,1,3,0,3,1,12
-25,18/06/2026,Czechia,South Africa,cz,za,1,1,1,1,3,15
-26,18/06/2026,Switzerland,Bosnia-Herzegovina,ch,ba,4,1,2,1,1,16
-27,19/06/2026,Canada,Qatar,ca,qa,6,0,2,2,0,16
-28,19/06/2026,Mexico,South Korea,mx,kr,1,0,1,1,0,16
-29,19/06/2026,United States,Australia,us,au,2,0,2,1,1,17
-30,20/06/2026,Scotland,Morocco,gb,ma,0,1,2,0,0,17
-31,20/06/2026,Brazil,Haiti,br,ht,3,0,5,0,1,18
-32,20/06/2026,Turkey,Paraguay,tr,py,0,1,3,1,0,18
-33,20/06/2026,Netherlands,Sweden,nl,se,5,1,2,1,1,19
-34,21/06/2026,Germany,Ivory Coast,de,ci,2,1,2,0,1,20
-35,21/06/2026,Ecuador,Curacao,ec,cw,0,0,2,0,0,20
-36,21/06/2026,Tunisia,Japan,tn,jp,0,4,1,1,0,20
-37,21/06/2026,Spain,Saudi Arabia,es,sa,4,0,2,1,1,21
-38,21/06/2026,Belgium,Iran,be,ir,0,0,2,0,0,21
-39,22/06/2026,Uruguay,Cape Verde,uy,cv,2,2,3,1,0,21
-40,22/06/2026,New Zealand,Egypt,nz,eg,1,3,1,3,3,24
-41,22/06/2026,Argentina,Austria,ar,at,,,,,,
-42,23/06/2026,France,Iraq,fr,iq,,,,,,
-43,23/06/2026,Norway,Senegal,no,sn,,,,,,
-44,23/06/2026,Jordan,Algeria,jo,dz,,,,,,
-45,23/06/2026,Portugal,Uzbekistan,pt,uz,,,,,,
-46,24/06/2026,England,Ghana,gb,gh,,,,,,
-47,24/06/2026,Panama,Croatia,pa,hr,,,,,,
-48,24/06/2026,Colombia,DR Congo,co,cd,,,,,,
-49,24/06/2026,Switzerland,Canada,ch,ca,,,,,,
-50,24/06/2026,Bosnia-Herzegovina,Qatar,ba,qa,,,,,,
-51,25/06/2026,Morocco,Haiti,ma,ht,,,,,,
-52,25/06/2026,Scotland,Brazil,gb,br,,,,,,
-53,25/06/2026,Czechia,Mexico,cz,mx,,,,,,
-54,25/06/2026,South Africa,South Korea,za,kr,,,,,,
-55,26/06/2026,Ecuador,Germany,ec,de,,,,,,
-56,26/06/2026,Curacao,Ivory Coast,cw,ci,,,,,,
-57,26/06/2026,Tunisia,Netherlands,tn,nl,,,,,,
-58,26/06/2026,Japan,Sweden,jp,se,,,,,,
-59,26/06/2026,Turkey,United States,tr,us,,,,,,
-60,26/06/2026,Paraguay,Australia,py,au,,,,,,
-61,26/06/2026,Senegal,Iraq,sn,iq,,,,,,
-62,26/06/2026,Norway,France,no,fr,,,,,,
-63,27/06/2026,Uruguay,Spain,uy,es,,,,,,
-64,27/06/2026,Cape Verde,Saudi Arabia,cv,sa,,,,,,
-65,27/06/2026,New Zealand,Belgium,nz,be,,,,,,
-66,27/06/2026,Egypt,Iran,eg,ir,,,,,,
-67,28/06/2026,Croatia,Ghana,hr,gh,,,,,,
-68,28/06/2026,Panama,England,pa,gb,,,,,,
-69,28/06/2026,DR Congo,Uzbekistan,cd,uz,,,,,,
-70,28/06/2026,Colombia,Portugal,co,pt,,,,,,
-71,28/06/2026,Jordan,Argentina,jo,ar,,,,,,
-72,28/06/2026,Algeria,Austria,dz,at,,,,,,
+match_id,date,team1,team2,team1_code,team2_code,team1_score,team2_score
+1,11/06/2026,Mexico,South Africa,mx,za,2,0
+2,12/06/2026,South Korea,Czechia,kr,cz,2,1
+3,12/06/2026,Canada,Bosnia-Herzegovina,ca,ba,1,1
+4,13/06/2026,United States,Paraguay,us,py,4,1
+5,13/06/2026,Qatar,Switzerland,qa,ch,1,1
+6,14/06/2026,Brazil,Morocco,br,ma,1,1
+7,14/06/2026,Haiti,Scotland,ht,gb,0,1
+8,14/06/2026,Australia,Turkey,au,tr,2,0
+9,14/06/2026,Germany,Curacao,de,cw,7,1
+10,15/06/2026,Netherlands,Japan,nl,jp,2,2
+11,15/06/2026,Ivory Coast,Ecuador,ci,ec,1,0
+12,15/06/2026,Sweden,Tunisia,se,tn,5,1
+13,15/06/2026,Spain,Cape Verde,es,cv,0,0
+14,15/06/2026,Belgium,Egypt,be,eg,1,1
+15,16/06/2026,Saudi Arabia,Uruguay,sa,uy,1,1
+16,16/06/2026,Iran,New Zealand,ir,nz,2,2
+17,16/06/2026,France,Senegal,fr,sn,3,1
+18,17/06/2026,Iraq,Norway,iq,no,1,4
+19,17/06/2026,Argentina,Algeria,ar,dz,3,0
+20,17/06/2026,Austria,Jordan,at,jo,3,1
+21,17/06/2026,Portugal,DR Congo,pt,cd,1,1
+22,18/06/2026,England,Croatia,gb,hr,4,2
+23,18/06/2026,Ghana,Panama,gh,pa,1,0
+24,18/06/2026,Uzbekistan,Colombia,uz,co,1,3
+25,18/06/2026,Czechia,South Africa,cz,za,1,1
+26,18/06/2026,Switzerland,Bosnia-Herzegovina,ch,ba,4,1
+27,19/06/2026,Canada,Qatar,ca,qa,6,0
+28,19/06/2026,Mexico,South Korea,mx,kr,1,0
+29,19/06/2026,United States,Australia,us,au,2,0
+30,20/06/2026,Scotland,Morocco,gb,ma,0,1
+31,20/06/2026,Brazil,Haiti,br,ht,3,0
+32,20/06/2026,Turkey,Paraguay,tr,py,0,1
+33,20/06/2026,Netherlands,Sweden,nl,se,5,1
+34,21/06/2026,Germany,Ivory Coast,de,ci,2,1
+35,21/06/2026,Ecuador,Curacao,ec,cw,0,0
+36,21/06/2026,Tunisia,Japan,tn,jp,0,4
+37,21/06/2026,Spain,Saudi Arabia,es,sa,4,0
+38,21/06/2026,Belgium,Iran,be,ir,0,0
+39,22/06/2026,Uruguay,Cape Verde,uy,cv,2,2
+40,22/06/2026,New Zealand,Egypt,nz,eg,1,3
+41,22/06/2026,Argentina,Austria,ar,at,2,0
+42,23/06/2026,France,Iraq,fr,iq,3,0
+43,23/06/2026,Norway,Senegal,no,sn,3,2
+44,23/06/2026,Jordan,Algeria,jo,dz,1,2
+45,23/06/2026,Portugal,Uzbekistan,pt,uz,5,0
+46,24/06/2026,England,Ghana,gb,gh,0,0
+47,24/06/2026,Panama,Croatia,pa,hr,0,1
+48,24/06/2026,Colombia,DR Congo,co,cd,1,0
+49,24/06/2026,Switzerland,Canada,ch,ca,,
+50,24/06/2026,Bosnia-Herzegovina,Qatar,ba,qa,,
+51,25/06/2026,Morocco,Haiti,ma,ht,,
+52,25/06/2026,Scotland,Brazil,gb,br,,
+53,25/06/2026,Czechia,Mexico,cz,mx,,
+54,25/06/2026,South Africa,South Korea,za,kr,,
+55,26/06/2026,Ecuador,Germany,ec,de,,
+56,26/06/2026,Curacao,Ivory Coast,cw,ci,,
+57,26/06/2026,Tunisia,Netherlands,tn,nl,,
+58,26/06/2026,Japan,Sweden,jp,se,,
+59,26/06/2026,Turkey,United States,tr,us,,
+60,26/06/2026,Paraguay,Australia,py,au,,
+61,26/06/2026,Senegal,Iraq,sn,iq,,
+62,26/06/2026,Norway,France,no,fr,,
+63,27/06/2026,Uruguay,Spain,uy,es,,
+64,27/06/2026,Cape Verde,Saudi Arabia,cv,sa,,
+65,27/06/2026,New Zealand,Belgium,nz,be,,
+66,27/06/2026,Egypt,Iran,eg,ir,,
+67,28/06/2026,Croatia,Ghana,hr,gh,,
+68,28/06/2026,Panama,England,pa,gb,,
+69,28/06/2026,DR Congo,Uzbekistan,cd,uz,,
+70,28/06/2026,Colombia,Portugal,co,pt,,
+71,28/06/2026,Jordan,Argentina,jo,ar,,
+72,28/06/2026,Algeria,Austria,dz,at,,
