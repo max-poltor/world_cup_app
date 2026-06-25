@@ -47,12 +47,12 @@ match_id,date,team1,team2,team1_code,team2_code,team1_score,team2_score
 46,24/06/2026,England,Ghana,gb,gh,0,0
 47,24/06/2026,Panama,Croatia,pa,hr,0,1
 48,24/06/2026,Colombia,DR Congo,co,cd,1,0
-49,24/06/2026,Switzerland,Canada,ch,ca,,
-50,24/06/2026,Bosnia-Herzegovina,Qatar,ba,qa,,
-51,25/06/2026,Morocco,Haiti,ma,ht,,
-52,25/06/2026,Scotland,Brazil,gb,br,,
-53,25/06/2026,Czechia,Mexico,cz,mx,,
-54,25/06/2026,South Africa,South Korea,za,kr,,
+49,24/06/2026,Switzerland,Canada,ch,ca,2,1
+50,24/06/2026,Bosnia-Herzegovina,Qatar,ba,qa,3,1
+51,25/06/2026,Morocco,Haiti,ma,ht,4,2
+52,25/06/2026,Scotland,Brazil,gb,br,0,3
+53,25/06/2026,Czechia,Mexico,cz,mx,0,3
+54,25/06/2026,South Africa,South Korea,za,kr,1,0
 55,26/06/2026,Ecuador,Germany,ec,de,,
 56,26/06/2026,Curacao,Ivory Coast,cw,ci,,
 57,26/06/2026,Tunisia,Netherlands,tn,nl,,
