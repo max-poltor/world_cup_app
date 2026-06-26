@@ -53,12 +53,12 @@ match_id,date,team1,team2,team1_code,team2_code,team1_score,team2_score
 52,25/06/2026,Scotland,Brazil,gb,br,0,3
 53,25/06/2026,Czechia,Mexico,cz,mx,0,3
 54,25/06/2026,South Africa,South Korea,za,kr,1,0
-55,26/06/2026,Ecuador,Germany,ec,de,,
-56,26/06/2026,Curacao,Ivory Coast,cw,ci,,
-57,26/06/2026,Tunisia,Netherlands,tn,nl,,
-58,26/06/2026,Japan,Sweden,jp,se,,
-59,26/06/2026,Turkey,United States,tr,us,,
-60,26/06/2026,Paraguay,Australia,py,au,,
+55,26/06/2026,Ecuador,Germany,ec,de,2,1
+56,26/06/2026,Curacao,Ivory Coast,cw,ci,0,2
+57,26/06/2026,Tunisia,Netherlands,tn,nl,1,3
+58,26/06/2026,Japan,Sweden,jp,se,1,1
+59,26/06/2026,Turkey,United States,tr,us,3,2
+60,26/06/2026,Paraguay,Australia,py,au,0,0
 61,26/06/2026,Senegal,Iraq,sn,iq,,
 62,26/06/2026,Norway,France,no,fr,,
 63,27/06/2026,Uruguay,Spain,uy,es,,
